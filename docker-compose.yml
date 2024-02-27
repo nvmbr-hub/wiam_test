@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  php:
+    image: yiisoftware/yii2-php:8.2-fpm-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./yii2-app:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_DSN: ${DATABASE_DSN}
+
+  db:
+    image: postgres:16.2-alpine3.19
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+volumes:
+  pgdata:
